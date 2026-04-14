@@ -140,7 +140,7 @@ EOCAT
     fi
 )
 
-bootc --source-imgref=containers-storage:$imageref:$imagetag --target-imgref=$imageref:$imagetag
+ostreecontainer --url=$imageref:$imagetag --transport=containers-storage --no-signature-verification
 %include /usr/share/anaconda/post-scripts/install-configure-upgrade.ks
 %include /usr/share/anaconda/post-scripts/disable-fedora-flatpak.ks
 %include /usr/share/anaconda/post-scripts/install-flatpaks.ks
@@ -153,7 +153,7 @@ EOF
 # Signed Images
 cat <<EOF >>/usr/share/anaconda/post-scripts/install-configure-upgrade.ks
 %post --erroronfail --log=/tmp/anacoda_custom_logs/bootc-switch.log
-# bootc switch --mutate-in-place --enforce-container-sigpolicy --transport registry $imageref:$imagetag
+bootc switch --mutate-in-place --enforce-container-sigpolicy --transport registry $imageref:$imagetag
 %end
 EOF
 
