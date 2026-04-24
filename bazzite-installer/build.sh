@@ -8,7 +8,6 @@ set -exo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BASE_IMAGE=${BASE_IMAGE:?}
 INSTALL_IMAGE_PAYLOAD=${INSTALL_IMAGE_PAYLOAD:?}
-FLATPAK_DIR_SHORTNAME=${FLATPAK_DIR_SHORTNAME:?}
 
 # Create the directory that /root is symlinked to
 mkdir -p "$(realpath /root)"
@@ -16,10 +15,6 @@ mkdir -p "$(realpath /root)"
 # bwrap tries to write /proc/sys/user/max_user_namespaces which is mounted as ro
 # so we need to remount it as rw
 mount -o remount,rw /proc/sys
-
-# Install flatpaks
-curl --retry 3 -Lo /etc/flatpak/remotes.d/flathub.flatpakrepo https://dl.flathub.org/repo/flathub.flatpakrepo
-xargs -r flatpak install -y --noninteractive <"/src/$FLATPAK_DIR_SHORTNAME/flatpaks"
 
 # Pull the container image to be installed
 if mountpoint -q /usr/lib/containers/storage; then
@@ -86,20 +81,6 @@ Options=size=50%%,nr_inodes=1m,x-systemd.graceful-option=usrquota
 WantedBy=local-fs.target
 EOF
 systemctl enable var-tmp.mount
-
-# Mount /var/lib/flatpak as readonly.
-# This is in order to ensure the files dont get tainted when installing them in disk.
-cat >/etc/systemd/system/var-lib-flatpak.mount <<'EOF'
-[Mount]
-Type=none
-What=/var/lib/flatpak
-Where=/var/lib/flatpak
-Options=bind,ro
-
-[Install]
-WantedBy=multi-user.target
-EOF
-systemctl enable var-lib-flatpak.mount
 
 # Copy in the iso config for image-builder
 mkdir -p /usr/lib/bootc-image-builder

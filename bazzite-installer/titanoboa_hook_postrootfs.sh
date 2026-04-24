@@ -123,20 +123,9 @@ run0 --user=liveuser yad \
     < /tmp/anaconda.log
 %end
 
-$(
-    if [[ $imageref == *-deck* ]]; then
-        cat <<EOCAT
-# Set default user
-user --name=bazzite --password=bazzite --plaintext --groups=wheel
-EOCAT
-    fi
-)
-
 ostreecontainer --url=$imageref:$imagetag --transport=containers-storage --no-signature-verification
 %include /usr/share/anaconda/post-scripts/install-configure-upgrade.ks
 %include /usr/share/anaconda/post-scripts/disable-fedora-flatpak.ks
-%include /usr/share/anaconda/post-scripts/install-flatpaks.ks
-%include /usr/share/anaconda/post-scripts/flatpak-restore-selinux-labels.ks
 %include /usr/share/anaconda/post-scripts/secureboot-enroll-key.ks
 %include /usr/share/anaconda/post-scripts/secureboot-docs.ks
 
