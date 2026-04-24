@@ -1,0 +1,28 @@
+/* SPDX-License-Identifier: LGPL-2.1-or-later */
+#badge {
+    inline-size: 225px;
+    block-size: 80px;
+    background-image: url("logo.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+#brand::before {
+    content: "${NAME}";
+}
+
+.anaconda {
+    /* Brand palette */
+    --brand-default-light: #0047ab;
+    --brand-default: #8a2be2;
+    --brand-default-dark: #0047ab;
+
+    .logo {
+        background-image: url("logo.png");
+    }
+}
+
+.pf-v6-c-form__section:has(#anaconda-screen-accounts-root-account-enable-root-account) {
+    /* Hide a whole section with "Enable root account". Might be not as reliable as it seems to be */
+    display: none;
+}
