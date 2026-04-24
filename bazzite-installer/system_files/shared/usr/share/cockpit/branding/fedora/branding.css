@@ -7,10 +7,6 @@
     background-repeat: no-repeat;
 }
 
-#brand::before {
-    content: "${NAME}";
-}
-
 .anaconda {
     /* Brand palette */
     --brand-default-light: #0047ab;
@@ -19,10 +15,15 @@
 
     .logo {
         background-image: url("logo.png");
+        filter: unset;
     }
-}
 
-.pf-v6-c-form__section:has(#anaconda-screen-accounts-root-account-enable-root-account) {
-    /* Hide a whole section with "Enable root account". Might be not as reliable as it seems to be */
-    display: none;
+    .feedback-section {
+        display: none;
+    }
+
+    .pf-v6-c-form__section:has(#anaconda-screen-accounts-root-account-enable-root-account) {
+        /* Hide a whole section with "Enable root account". Might be not as reliable as it seems to be */
+        display: none;
+    }
 }

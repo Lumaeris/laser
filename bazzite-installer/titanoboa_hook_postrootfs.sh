@@ -33,14 +33,6 @@ SECUREBOOT_DOC_URL_QR="/usr/share/ublue-os/secure_boot_qr.png"
 
 echo "Bazzite release $VERSION_ID ($VERSION_CODENAME)" >/etc/system-release
 
-# Get Artwork
-case "${PRETTY_NAME,,}" in
-"bazzite"*)
-    mkdir -p /usr/share/anaconda/pixmaps/silverblue
-    cp -r /src/branding/* /usr/share/anaconda/pixmaps/
-    ;;
-esac
-
 # Installer icon
 _icon=/src/branding/bazzite-installer.svg
 _icon_symbol=/src/branding/bazzite-installer-symbolic.svg
