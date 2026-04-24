@@ -18,12 +18,8 @@
         filter: unset;
     }
 
-    .feedback-section {
-        display: none;
-    }
-
     .pf-v6-c-form__section:has(#anaconda-screen-accounts-root-account-enable-root-account) {
-        /* Hide a whole section with "Enable root account". Might be not as reliable as it seems to be */
+        /* Hide the whole section with "Enable root account". Might be not as reliable as it seems to be */
         display: none;
     }
 }
