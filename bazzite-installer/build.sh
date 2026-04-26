@@ -8,6 +8,7 @@ set -exo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BASE_IMAGE=${BASE_IMAGE:?}
 INSTALL_IMAGE_PAYLOAD=${INSTALL_IMAGE_PAYLOAD:?}
+# FLATPAK_DIR_SHORTNAME=${FLATPAK_DIR_SHORTNAME:?}
 
 # Create the directory that /root is symlinked to
 mkdir -p "$(realpath /root)"
@@ -16,12 +17,35 @@ mkdir -p "$(realpath /root)"
 # so we need to remount it as rw
 mount -o remount,rw /proc/sys
 
+# # Install flatpaks
+# curl --retry 3 -Lo /etc/flatpak/remotes.d/flathub.flatpakrepo https://dl.flathub.org/repo/flathub.flatpakrepo
+# xargs -r flatpak install -y --noninteractive <"/src/$FLATPAK_DIR_SHORTNAME/flatpaks"
+
 # Pull the container image to be installed
 if mountpoint -q /usr/lib/containers/storage; then
     # We load our image from the host container storage if possible
     podman save --format oci-archive "$INSTALL_IMAGE_PAYLOAD" | podman load --storage-opt additionalimagestore=''
 else
     podman pull "$INSTALL_IMAGE_PAYLOAD"
+fi
+
+# Determine desktop environment
+if [[ ${BASE_IMAGE} == *-gnome* ]]; then
+    desktop_env="gnome"
+else
+    desktop_env="kde"
+fi
+
+# Copy system files
+echo "Copying shared system files..."
+cp -a /src/system_files/shared/. /
+
+if [[ "$desktop_env" == "gnome" ]]; then
+    echo "Copying GNOME-specific system files..."
+    cp -a /src/system_files/gnome/. /
+elif [[ "$desktop_env" == "kde" ]]; then
+    echo "Copying KDE-specific system files..."
+    cp -a /src/system_files/kde/. /
 fi
 
 # Run the preinitramfs hook
@@ -45,6 +69,10 @@ systemctl enable livesys.service livesys-late.service
 
 # Run the postrootfs hook
 "$SCRIPT_DIR/titanoboa_hook_postrootfs.sh"
+
+# Copy system files
+echo "Copying overrides of system files..."
+cp -af /src/system_files/overrides/. /
 
 # image-builder needs gcdx64.efi
 dnf install -y grub2-efi-x64-cdboot
@@ -81,6 +109,20 @@ Options=size=50%%,nr_inodes=1m,x-systemd.graceful-option=usrquota
 WantedBy=local-fs.target
 EOF
 systemctl enable var-tmp.mount
+
+# # Mount /var/lib/flatpak as readonly.
+# # This is in order to ensure the files dont get tainted when installing them in disk.
+# cat >/etc/systemd/system/var-lib-flatpak.mount <<'EOF'
+# [Mount]
+# Type=none
+# What=/var/lib/flatpak
+# Where=/var/lib/flatpak
+# Options=bind,ro
+
+# [Install]
+# WantedBy=multi-user.target
+# EOF
+# systemctl enable var-lib-flatpak.mount
 
 # Copy in the iso config for image-builder
 mkdir -p /usr/lib/bootc-image-builder
