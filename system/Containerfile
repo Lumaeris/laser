@@ -1,7 +1,6 @@
 FROM ghcr.io/ublue-os/bazzite-gnome:testing
 
 RUN --mount=type=tmpfs,dst=/tmp \
-    --mount=type=tmpfs,dst=/root \
     dnf5 -y --setopt=install_weak_deps=False install nodejs-npm && \
     git clone https://github.com/UbayGD/reboottouefi /tmp/reboottouefi && \
     rm -rf /usr/share/gnome-shell/extensions/reboottouefi@ubaygd.com && \
