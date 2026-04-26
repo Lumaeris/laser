@@ -1,3 +1,13 @@
-FROM ghcr.io/ublue-os/bazzite-gnome:stable
+FROM ghcr.io/ublue-os/bazzite-gnome:testing
 
-COPY files/ /
+RUN --mount=type=tmpfs,dst=/tmp \
+    --mount=type=tmpfs,dst=/root \
+    dnf5 -y --setopt=install_weak_deps=False install nodejs-npm && \
+    git clone https://github.com/UbayGD/reboottouefi /tmp/reboottouefi && \
+    rm -rf /usr/share/gnome-shell/extensions/reboottouefi@ubaygd.com && \
+    make -C /tmp/reboottouefi pack && \
+    unzip -o /tmp/reboottouefi/reboottouefi@ubaygd.com-*.zip /usr/share/gnome-shell/extensions/reboottouefi@ubaygd.com && \
+    rm -rf /tmp/reboottouefi && \
+    rm -rf /root/.npm && \
+    dnf5 -y remove nodejs-npm && \
+    dnf5 clean all
