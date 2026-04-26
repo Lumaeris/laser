@@ -1,8 +1,6 @@
 #!/bin/sh
 
 # I18n support for few extensions
-mv /usr/share/gnome-shell/extensions/caffeine@patapon.info/locale /usr/share/gnome-shell/extensions/caffeine@patapon.info/po
-mv /usr/share/gnome-shell/extensions/appindicatorsupport@rgcjonas.gmail.com/locale /usr/share/gnome-shell/extensions/appindicatorsupport@rgcjonas.gmail.com/po
 for ext in \
     logomenu@aryan_k \
     appindicatorsupport@rgcjonas.gmail.com \
@@ -14,5 +12,6 @@ do
         msgfmt /usr/share/gnome-shell/extensions/${ext}/po/${locale}.po -o /usr/share/gnome-shell/extensions/${ext}/locale/${locale}/LC_MESSAGES/${ext}.mo;
     done;
     unset -v locale;
+    glib-compile-schemas /usr/share/gnome-shell/extensions/$ext/schemas;
 done
 unset -v ext
