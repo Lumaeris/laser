@@ -5,7 +5,7 @@ RUN --mount=type=tmpfs,dst=/tmp \
     git clone https://github.com/UbayGD/reboottouefi /tmp/reboottouefi && \
     rm -rf /usr/share/gnome-shell/extensions/reboottouefi@ubaygd.com && \
     env HOME=/var/roothome make -C /tmp/reboottouefi pack && \
-    unzip -o /tmp/reboottouefi/reboottouefi@ubaygd.com-*.zip /usr/share/gnome-shell/extensions/reboottouefi@ubaygd.com && \
+    unzip -o /tmp/reboottouefi/reboottouefi@ubaygd.com-*.zip -d /usr/share/gnome-shell/extensions/reboottouefi@ubaygd.com && \
     rm -rf /tmp/reboottouefi && \
     rm -rf /var/roothome/.npm && \
     dnf5 -y remove nodejs-npm && \
