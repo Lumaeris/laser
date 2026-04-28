@@ -1,5 +1,6 @@
 [org.gnome.shell]
 favorite-apps = ['anaconda.desktop', 'org.mozilla.firefox.desktop', 'org.gnome.Nautilus.desktop']
+enabled-extensions=['logomenu@aryan_k', 'blur-my-shell@aunetx', 'hotedge@jonathan.jdoda.ca', 'caffeine@patapon.info', 'block-caribou-36@lxylxy123456.ercli.dev']
 [org.gnome.desktop.background]
 picture-uri="file:///usr/share/wallpapers/convergence.jxl"
 picture-uri-dark="file:///usr/share/wallpapers/convergence.jxl"
