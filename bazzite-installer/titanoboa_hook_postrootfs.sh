@@ -198,6 +198,14 @@ qrencode -o "$SECUREBOOT_DOC_URL_QR" "$SECUREBOOT_DOC_URL"
         ublue-guest-user.service \
         ublue-os-media-automount.service \
         ublue-system-setup.service \
+        bazzite-flatpak-manager.service \
+        ublue-flatpak-manager.service \
+        flatpak-add-fedora-repos.service \
+        greenboot-set-rollback-trigger.service \
+        greenboot-healthcheck.service \
+        input-remapper.service \
+        switcheroo-control.service \
+        malcontent-timerd.service \
         check-sb-key.service; do
         if systemctl list-unit-files "$s" >/dev/null 2>&1; then
             systemctl disable "$s"
@@ -205,8 +213,6 @@ qrencode -o "$SECUREBOOT_DOC_URL_QR" "$SECUREBOOT_DOC_URL"
     done
 
     for s in \
-        bazzite-flatpak-manager.service \
-        ublue-flatpak-manager.service \
         podman-auto-update.timer \
         bazzite-user-setup.service \
         ublue-user-setup.service; do
