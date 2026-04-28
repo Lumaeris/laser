@@ -308,7 +308,7 @@ fi
 
 # Remove malcontent for now
 if [[ $desktop_env == gnome ]]; then
-    dnf -yq --no-autoremove remove malcontent
+    dnf -yq remove --no-autoremove malcontent
 fi
 
 # Install Gparted
