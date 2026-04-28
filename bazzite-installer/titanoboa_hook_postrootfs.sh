@@ -15,9 +15,6 @@ mkdir -p /var/lib/rpm-state # Needed for Anaconda Web UI
 # Utilities for displaying a dialog prompting users to review secure boot documentation
 dnf install -qy --setopt=install_weak_deps=0 qrencode yad
 
-# Install conky to display hardware information on the desktop
-dnf install -qy --setopt=install_weak_deps=0 conky
-
 # Variables
 imageref="$(podman images --format '{{ index .Names 0 }}\n' 'bazzite*' | head -1)"
 imageref="${imageref##*://}"
@@ -261,6 +258,12 @@ sway*) desktop_env=sway ;;
 xfce*) desktop_env=xfce ;;
 esac
 
+# Install conky to display hardware information on the desktop
+# Excluded from GNOME for the time being
+if [[ $desktop_env == kde ]]; then
+    dnf install -qy --setopt=install_weak_deps=0 conky
+fi
+
 # Don't start Steam at login
 rm -vf /etc/skel/.config/autostart/steam*.desktop
 
@@ -304,11 +307,6 @@ fi
 # Set new background and default pins for GNOME
 if [[ $desktop_env == gnome ]]; then
     glib-compile-schemas /usr/share/glib-2.0/schemas
-fi
-
-# Remove malcontent for now
-if [[ $desktop_env == gnome ]]; then
-    dnf -yq remove malcontent-control malcontent-pam malcontent-tools || :
 fi
 
 # Install Gparted
