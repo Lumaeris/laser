@@ -265,7 +265,7 @@ esac
 rm -vf /etc/skel/.config/autostart/steam*.desktop
 
 # Remove packages that shouldn't be used in a live session
-dnf -yq remove steam lutris bazaar waydroid malcontent || :
+dnf -yq remove steam lutris bazaar waydroid || :
 
 # Don't check for verified image
 rm -vf /etc/profile.d/verify_motd.sh
@@ -304,6 +304,11 @@ fi
 # Set new background and default pins for GNOME
 if [[ $desktop_env == gnome ]]; then
     glib-compile-schemas /usr/share/glib-2.0/schemas
+fi
+
+# Remove malcontent for now
+if [[ $desktop_env == gnome ]]; then
+    dnf -yq --no-autoremove remove malcontent
 fi
 
 # Install Gparted
