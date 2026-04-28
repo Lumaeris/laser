@@ -72,13 +72,13 @@ jobs:
         id: generate-tag
         shell: bash
         run: |
-          TAG="stable"
+          # TAG="stable"
 
-          if [[ "${{ github.ref_name }}" != "main" ]]; then
-              TAG="testing"
-          fi
+          # if [[ "${{ github.ref_name }}" != "main" ]]; then
+          #     TAG="testing"
+          # fi
 
-          echo "tag=${TAG}" >> $GITHUB_OUTPUT
+          echo "tag=unstable" >> $GITHUB_OUTPUT
 
       # The image registry name must be lower-case, but GitHub usernames can be capitalized.
       # - name: Get lower-case equivalent of the repository owner's username
