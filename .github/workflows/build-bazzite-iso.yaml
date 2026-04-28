@@ -41,7 +41,7 @@ jobs:
       - name: Free disk space
         uses: hastd/free-disk-space@68572aeaadb7f76bd408246328e95926323402b5 # v0.1.2
         with:
-          skip-if-available: "64G"
+          skip-if-available: "70G"
 
       - name: Mount Container Storage BTRFS Loopback
         run: |
