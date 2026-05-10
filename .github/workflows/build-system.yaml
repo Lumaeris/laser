@@ -2,6 +2,11 @@
 name: Build container image
 on:
   workflow_dispatch:
+  push:
+    paths-ignore: # don't rebuild if only documentation and titanoboa has changed
+      - "**.md"
+      - "bazzite-installer/*"
+      - ".github/workflows/build-bazzite-iso.yml"
 
 env:
   IMAGE_DESC: "Laser (testing image)"

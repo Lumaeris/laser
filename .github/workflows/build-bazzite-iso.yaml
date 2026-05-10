@@ -4,6 +4,11 @@ name: Build Bazzite ISO
 on:
   workflow_dispatch:
   workflow_call:
+  push:
+    paths-ignore: # don't rebuild if only documentation and titanoboa has changed
+      - "**.md"
+      - "system/*"
+      - ".github/workflows/build-system.yml"
 
 # env:
 #   REPO_OWNER: ${{ github.repository_owner }}
