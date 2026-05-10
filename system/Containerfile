@@ -1,12 +1,3 @@
-FROM ghcr.io/ublue-os/bazzite-gnome:testing
+FROM ghcr.io/ublue-os/bazzite-gnome:stable
 
-RUN --mount=type=tmpfs,dst=/tmp \
-    --mount=type=bind,source=./.,target=/src \
-    dnf5 -y --setopt=install_weak_deps=False install glib2-devel nodejs-npm && \
-    git clone https://github.com/UbayGD/reboottouefi /tmp/reboottouefi && \
-    rm -rf /usr/share/gnome-shell/extensions/reboottouefi@ubaygd.com && \
-    env HOME=/tmp make -C /tmp/reboottouefi pack && \
-    unzip -o /tmp/reboottouefi/reboottouefi@ubaygd.com-*.zip -d /usr/share/gnome-shell/extensions/reboottouefi@ubaygd.com && \
-    /src/ext.sh && \
-    dnf5 -y remove glib2-devel nodejs-npm && \
-    dnf5 clean all
+RUN bootc container lint
