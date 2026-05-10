@@ -1,5 +1,8 @@
 FROM ghcr.io/ublue-os/bazzite-gnome:stable
 
-RUN dnf5 -y remove waydroid && dnf5 clean all
+RUN --mount=type=tmpfs,dst=/run \
+    --mount=type=tmpfs,dst=/tmp \
+    --mount=type=tmpfs,dst=/var \
+    dnf5 -y remove waydroid && dnf5 clean all
 
 RUN bootc container lint
