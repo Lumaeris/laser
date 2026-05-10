@@ -8,7 +8,7 @@ on:
     paths-ignore: # don't rebuild if only documentation and titanoboa has changed
       - "**.md"
       - "system/*"
-      - ".github/workflows/build-system.yml"
+      - ".github/workflows/build-system.yaml"
 
 # env:
 #   REPO_OWNER: ${{ github.repository_owner }}

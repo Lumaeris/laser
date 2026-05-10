@@ -6,7 +6,7 @@ on:
     paths-ignore: # don't rebuild if only documentation and titanoboa has changed
       - "**.md"
       - "bazzite-installer/*"
-      - ".github/workflows/build-bazzite-iso.yml"
+      - ".github/workflows/build-bazzite-iso.yaml"
 
 env:
   IMAGE_DESC: "Laser (testing image)"
