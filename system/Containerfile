@@ -1,8 +1,3 @@
-FROM ghcr.io/ublue-os/bazzite-gnome:stable
+FROM ghcr.io/ublue-os/bazzite:stable
 
-RUN --mount=type=tmpfs,dst=/run \
-    --mount=type=tmpfs,dst=/tmp \
-    --mount=type=tmpfs,dst=/var \
-    dnf5 -y remove waydroid && dnf5 clean all
-
-RUN bootc container lint
+RUN echo -e "[General]\nLastSeenVersion=$(rpm -q --qf '%{VERSION}' plasma-desktop)" | tee "/etc/skel/.config/plasma-welcomerc"
