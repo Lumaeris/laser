@@ -1,3 +1,14 @@
-FROM ghcr.io/ublue-os/bazzite:stable
+FROM ghcr.io/ublue-os/bazzite-gnome:testing
 
-RUN echo -e "[General]\nLastSeenVersion=$(rpm -q --qf '%{VERSION}' plasma-desktop)" | tee "/etc/skel/.config/plasma-welcomerc"
+COPY ext /usr/share/glib-2.0/schemas/zz0-03-bazzite-desktop-silverblue-extensions.gschema.override
+
+RUN --mount=type=tmpfs,dst=/run \
+    --mount=type=tmpfs,dst=/tmp \
+    --mount=type=tmpfs,dst=/var \
+    dnf5 -y install glib2-devel && dnf5 clean all && \
+    git clone https://github.com/AlexanderVanhee/gradia-capture --depth=1 \
+        /usr/share/gnome-shell/extensions/gradia-integration@alexandervanhee.github.io && \
+    mv -f /usr/share/gnome-shell/extensions/gradia-integration@alexandervanhee.github.io/src/* \
+        /usr/share/gnome-shell/extensions/gradia-integration@alexandervanhee.github.io && \
+    glib-compile-schemas /usr/share/gnome-shell/extensions/gradia-integration@alexandervanhee.github.io/schemas && \
+    glib-compile-schemas /usr/share/glib-2.0/schemas
