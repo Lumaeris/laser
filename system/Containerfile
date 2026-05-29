@@ -5,10 +5,13 @@ COPY ext /usr/share/glib-2.0/schemas/zz0-03-bazzite-desktop-silverblue-extension
 RUN --mount=type=tmpfs,dst=/run \
     --mount=type=tmpfs,dst=/tmp \
     --mount=type=tmpfs,dst=/var \
-    dnf5 -y install glib2-devel && dnf5 clean all && \
+    dnf5 -y install glib2-devel && \
     git clone https://github.com/AlexanderVanhee/gradia-capture --depth=1 \
+        /tmp/gradia-capture && \
+    mkdir -p /usr/share/gnome-shell/extensions/gradia-integration@alexandervanhee.github.io && \
+    mv -f /tmp/gradia-capture/{src/*,icons,schemas} \
         /usr/share/gnome-shell/extensions/gradia-integration@alexandervanhee.github.io && \
-    mv -f /usr/share/gnome-shell/extensions/gradia-integration@alexandervanhee.github.io/src/* \
-        /usr/share/gnome-shell/extensions/gradia-integration@alexandervanhee.github.io && \
+    ls -l /usr/share/gnome-shell/extensions/gradia-integration@alexandervanhee.github.io && \
     glib-compile-schemas /usr/share/gnome-shell/extensions/gradia-integration@alexandervanhee.github.io/schemas && \
-    glib-compile-schemas /usr/share/glib-2.0/schemas
+    glib-compile-schemas /usr/share/glib-2.0/schemas && \
+    dnf5 -y remove glib2-devel && dnf5 clean all
