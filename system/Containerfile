@@ -1,17 +1,9 @@
-FROM ghcr.io/ublue-os/bazzite-gnome:testing
+FROM ghcr.io/zirconium-dev/zirconium:latest
 
-COPY ext /usr/share/glib-2.0/schemas/zz0-03-bazzite-desktop-silverblue-extensions.gschema.override
+COPY just /usr/share/zirconium/just/00-start.just
 
-RUN --mount=type=tmpfs,dst=/run \
-    --mount=type=tmpfs,dst=/tmp \
-    --mount=type=tmpfs,dst=/var \
-    dnf5 -y install glib2-devel && \
-    git clone https://github.com/AlexanderVanhee/gradia-capture --depth=1 \
-        /tmp/gradia-capture && \
-    mkdir -p /usr/share/gnome-shell/extensions/gradia-integration@alexandervanhee.github.io && \
-    mv -f /tmp/gradia-capture/{src/*,icons,schemas} \
-        /usr/share/gnome-shell/extensions/gradia-integration@alexandervanhee.github.io && \
-    ls -l /usr/share/gnome-shell/extensions/gradia-integration@alexandervanhee.github.io && \
-    glib-compile-schemas /usr/share/gnome-shell/extensions/gradia-integration@alexandervanhee.github.io/schemas && \
-    glib-compile-schemas /usr/share/glib-2.0/schemas && \
-    dnf5 -y remove glib2-devel && dnf5 clean all
+RUN --mount=type=tmpfs,dst=/tmp \
+    git clone https://github.com/opentabletdriver/opentabletdriver --branch v0.6.7 --depth=1 /tmp/otd && \
+    install -Dm0644 <(/tmp/otd/generate-rules.sh) /usr/lib/opentabletdriver-config/udev/rules.d/70-opentabletdriver.rules && \
+    install -Dm0644 /tmp/otd/eng/bash/Generic/usr/lib/modprobe.d/99-opentabletdriver.conf -t /usr/lib/opentabletdriver-config/modprobe.d && \
+    install -Dm0644 /tmp/otd/eng/bash/Generic/usr/lib/modules-load.d/opentabletdriver.conf -t /usr/lib/opentabletdriver-config/modules-load.d
